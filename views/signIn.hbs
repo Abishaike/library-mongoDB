@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<!--
+	Author: Abishaike Balachandran
+  Course: WEB3222
+  Assignment 2
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+  <title>Sign In</title>
+  <style>
+    body {
+      background-image: url("images/backdrop.jpg");
+      background-size: cover;
+    }
+
+    h1 {
+      text-align: center;
+      color: rgb(236, 101, 241);
+      font-family: 'Courgette', cursive;
+      font-size: 4.5em;
+      margin: 0;
+    }
+
+    .container {
+      width: 40%;
+      margin-left: 30%;
+      position: fixed;
+      top: 52%;
+    }
+
+    input[type=email],
+    input[type=password] {
+      position: absolute;
+      left: 4%;
+      width: 80%;
+      height: 40%;
+      text-align: center;
+      font-family: 'Courgette', cursive;
+      font-size: 1.5em;
+    }
+
+    input[type=password] {
+      margin-top: 5%;
+    }
+
+    input[type=submit] {
+      position: absolute;
+      left: 30%;
+      top: 150%;
+      width: 30%;
+      height: 50%;
+      font-family: 'Courgette', cursive;
+      margin-top: 5%;
+      font-size: 1.5em;
+    }
+
+    input[type=submit]:hover {
+      background-color: rgb(68, 194, 68);
+    }
+
+    label {
+      position: absolute;
+      top: 260%;
+      left: 17%;
+      font-family: 'Courgette', cursive;
+      font-size: 2.5em;
+    }
+  </style>
+</head>
+
+<body>
+  {{>header}}
+
+  <article class="container">
+    <form method="POST" action="/signin">
+      <input type="email" id="uname" name="uname" placeholder="Username">
+      <br><br>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <br><br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <label id="message">{{data.status}}</label>
+  </article>
+
+</body>
+
+</html>

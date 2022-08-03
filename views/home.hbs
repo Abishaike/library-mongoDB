@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<!--
+	Author: Abishaike Balachandran
+  Course: WEB3222
+  Assignment 2
+-->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+  <title>Sign In</title>
+  <style>
+    body {
+      background-image: url("images/backdrop.jpg");
+      background-size: cover;
+    }
+
+    h1 {
+      text-align: left;
+      color: rgb(236, 101, 241);
+      font-family: 'Courgette', cursive;
+      font-size: 4.5em;
+      margin: 1%;
+    }
+
+    a {
+      position: fixed;
+      top: 5%;
+      right: 2%;
+      font-family: 'Courgette', cursive;
+      font-size: 2.5em;
+      color: rgb(224, 5, 210);
+    }
+
+    a:hover {
+      color: white;
+    }
+
+    .left {
+      border: 5px dashed rgb(224, 5, 210);
+      width: 35%;
+      background-color: antiquewhite;
+      text-align: center;
+    }
+
+    .left h2 {
+      font-family: 'Courgette', cursive;
+      font-size: 2.5em;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+
+    .books {
+      text-align: left;
+      position: relative;
+      left: 2%;
+      padding-top: 2%;
+      padding-bottom: 4%;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    button {
+      padding-top: 2%;
+      width: 100%;
+      margin-bottom: 2%;
+
+      font-family: 'Courgette', cursive;
+      font-size: 1.0em;
+    }
+
+    button:disabled {
+      background-color: rgb(238, 104, 104);
+    }
+
+    button:enabled {
+      background-color: aquamarine;
+    }
+
+    button:enabled:hover {
+      background-color: rgb(68, 194, 68);
+    }
+
+    .right {
+      border: 5px dashed rgb(224, 5, 210);
+      width: 40%;
+      background-color: antiquewhite;
+      text-align: center;
+      position: fixed;
+      right: 2%;
+      top: 18%;
+      font-family: 'Courgette', cursive;
+      font-size: 1.1em;
+    }
+
+    #userHeading {
+      font-family: 'Courgette', cursive;
+      font-size: 1.5em;
+      padding-bottom: 1%;
+    }
+  </style>
+</head>
+
+<body>
+  {{>header}}
+  <a href="/signout">Sign Out</a>
+  <form id="libraryRecords" method="POST" action="/home">
+    <article class="left">
+      <h2>Available Books</h2>
+      <div class="books">
+        {{#each data.availBooks}}
+        <input type="checkbox" id="bkCheckBox{{this.id}}" name="bkCheckBoxAvail" value="{{this.title}}">
+        <label title="{{this.author}}" for="bkCheckBox{{this.id}}">{{this.title}}</label><br>
+        {{/each}}
+      </div>
+      <button type="button" id="borrowBtn" disabled>Borrow</button>
+    </article>
+
+    <article class="right">
+      <label class="homeLabel" id="userHeading">{{data.userName}}</label>
+      <div class="books">
+        {{#each data.borrowedBooks}}
+        <input type="checkbox" id="bkCheckBox{{this.id}}" name="bkCheckBoxNotAvail" value="{{this.title}}">
+        <label title="{{this.author}}" for="bkCheckBox{{this.id}}">{{this.title}}</label><br>
+        {{/each}}
+      </div>
+      <button type="button" id="returnBtn" disabled>Return</button>
+    </article>
+  </form>
+
+  <script>
+
+    // Section 1 - Enabling the button if at least one of the options have been selected
+
+    // Section 1A - Available Books
+    // Initial Conditions - Ensure that the borrowButton has been disabled
+    var i;
+    const chkBoxAvailable = document.getElementsByName("bkCheckBoxAvail");
+    document.getElementById("borrowBtn").disabled = true;
+
+    // Loop through all of the checkboxes on the available books side to see if any of the checkboxes have been checked
+    for (const chkBox of chkBoxAvailable) {
+      chkBox.addEventListener("change", checkerAvailBooks);
+    }
+
+    // Callback function for the event listener listed above
+    function checkerAvailBooks(e) {
+      // Ensure that the button has initially been disabled
+      document.getElementById("borrowBtn").disabled = true;
+
+      /*
+      Loop through all of the checkboxes again to determine whether any of the checkboxes have been checked. If any of the checkboxes have been checked, override the button and enable it
+      */
+      for (i = 0; i < chkBoxAvailable.length; i++) {
+        if (chkBoxAvailable[i].checked) {
+          document.getElementById("borrowBtn").disabled = false;
+        }
+      }
+    }
+
+    // Section 1B - Not Available Books
+    const chkBoxNotAvailable = document.getElementsByName("bkCheckBoxNotAvail");
+    document.getElementById("returnBtn").disabled = true;
+
+    for (const chkBox of chkBoxNotAvailable) {
+      chkBox.addEventListener("change", checkerNotAvailBooks);
+    }
+
+    function checkerNotAvailBooks(e) {
+      document.getElementById("returnBtn").disabled = true;
+      for (i = 0; i < chkBoxNotAvailable.length; i++) {
+        if (chkBoxNotAvailable[i].checked) {
+          document.getElementById("returnBtn").disabled = false;
+        }
+      }
+    }
+
+    // Section 2 - Click Listeners for the borrow and return buttons
+    document.getElementById("borrowBtn").addEventListener("click", sendBorrowBtnResp);
+    function sendBorrowBtnResp(e) {
+      document.getElementById("libraryRecords").submit();
+    }
+
+    document.getElementById("returnBtn").addEventListener("click", sendBorrowBtnResp);
+    function sendBorrowBtnResp(e) {
+      document.getElementById("libraryRecords").submit();
+    }
+  </script>
+</body>
+
+</html>
